@@ -1,6 +1,6 @@
 clear; close all;
 % Load snapshots
-snapshots = load('snapshots_fitz/Test_snapshots_N1024_tsteps1000000_Tend8.mat'); % Adjust file path as needed
+snapshots = load('snapshots_fitz/Test_snapshots_N1024_tsteps1000000_Tend8.mat');
 Y = snapshots.Y; % Size 2N x M
 
 Tend = 8.0;
@@ -123,7 +123,7 @@ for k = 1:tsteps
     g_r = zeros(k_V + k_W, 1);
     F_r = zeros(k_V + k_W, 1);
 
-    g_r(1:k_V) = g_r(1:k_V) + e/h * bc(t_k) * U_V' * e_1;
+    g_r(1:k_V) = e/h * bc(t_k) * U_V' * e_1;
     F_r(1:k_V) = 1/e * U_V' * nonlin(U_V * y(1:k_V, k));
 
     % Compute g + F + c
