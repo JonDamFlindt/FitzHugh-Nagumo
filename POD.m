@@ -1,6 +1,6 @@
 clear; close all;
 % Load snapshots
-snapshots = load('snapshots_fitz/Test_snapshots_N1024_tsteps1000000_Tend8.mat');
+snapshots = load('snapshots_fitz/Test_snapshots_N1024_tsteps1000000_Tend8.mat'); % Adjust file path as needed
 Y = snapshots.Y; % Size 2N x M
 
 Tend = 8.0;
@@ -149,3 +149,13 @@ xlabel('Time');
 ylabel('Solution (Voltage)');
 legend('V', 'W');
 title('Reduced-order model solutions');
+
+
+% Plot the solutions
+figure;
+plot(W_reconstructed(1,:), V_reconstructed(1,:), 'r--');
+hold on;
+%plot(tList, W_reconstructed(1, :));
+xlabel('W');
+ylabel('V');
+title('Phase plot of V and W');
