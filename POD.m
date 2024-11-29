@@ -13,6 +13,7 @@ V = Y(1:1024, :);   % First 1024 rows
 W = Y(1025:end, :); % Last 1024 rows
 
 
+% ------------------ FULL ORDER MODEL ------------------
 figure;
 hold on;
 plot(t, V(1,:));
@@ -24,35 +25,24 @@ legend('V', 'W')
 hold off;
 
 
-% SVD
+% ------------------------- SVD -------------------------
 [U_V, S_V, ~] = svd(V, 'econ');
 [U_W, S_W, ~] = svd(W, 'econ');
 
 
-function k = GetPODModes(singular_values)
-    % Change as desired, personally I prefer 100 - 1e-6
-    threshold = 100 - 1.0e-6;
-    
-    % Calculate the Relative Info Content
-    info_sum = sum(singular_values);
-    info_cumsum = cumsum(singular_values);
-    Relative_Information_Content = (info_cumsum / info_sum) * 100;
-
-    % Choose the first k that satisfies the threshold
-    k = find(Relative_Information_Content >= threshold, 1);
-end
-
-k_V = GetPODModes(diag(S_V));
+k_V = PODModes(diag(S_V));
 fprintf('Number of modes retained for V: %d\n', k_V);
-k_W = GetPODModes(diag(S_W));
+k_W = PODModes(diag(S_W));
 fprintf('Number of modes retained for W: %d\n', k_W);
+p = min(k_V, k_W); % Should this be max(k_V, k_W)? Neither/independent?
 
 
 
+% ------------------- REDUCED ORDER MODEL -------------------
 % Get the reduced bases
-U_V = U_V(:,1:k_V);
-U_W = U_W(:,1:k_W);
-U = [U_V, zeros(N, k_W); zeros(N, k_V), U_W];  % Size: 2N x (k_V + k_W)
+U_V = U_V(:,1:p);
+U_W = U_W(:,1:p);
+U = [U_V, zeros(N, p); zeros(N, p), U_W];  % Size: 2N x (k_V + k_W)
 
 % Plot singular values and RIC
 figure;
@@ -79,7 +69,8 @@ legend('V', 'W');
 title('RIC vs. Number of columns');
 hold off;
 
-% Generate the operators
+
+% ------------------- POD & EXPLICIT EULER -------------------
 [E, A, c] = genOperators(N);
 
 % Project the constant full-order operators onto the reduced basis U
@@ -88,7 +79,7 @@ c_r = U' * c;
 
 % Parameter setup
 Tend = 8.0;
-tsteps = 125000; % Number of time steps, kept crash at 1000000
+tsteps = 1000000;
 dt = Tend/tsteps;
 fprintf('Time step: %f\n', dt);
 % list of time steps
@@ -97,6 +88,10 @@ L = 1; % length
 % system parameters:
 e = 0.015;
 h = L/(N + 2);
+
+% Save every 1000th time step
+times = 1:tsteps;
+storeInterval = times(mod(times, tsteps/1000) == 0);
 
 % 90% sure that the error is below this line
 %---------------------------------------- 
@@ -107,49 +102,55 @@ e_1 = zeros(N, 1);
 e_1(1) = 1;
 
 
-% Assumption regarding the initial conditions
-a0 = zeros(k_V + k_W, 1);  % Initial conditions
-y = zeros(k_V + k_W, length(tList));
-y(:, 1) = a0;
-y(1:k_V) = -bc(0) * U_V' * e_1;
+% Define the initial conditions, y(0)=0
+y_previous = zeros(2*p, 1); % Correct, for all spatial points.
 
 
 % Time-stepping loop
-for k = 1:tsteps
+Y = [];  % Initialize snapshot matrix
+for k = 2:tsteps+1
     t_k = tList(k);
 
+    % Initialize g, F; after p rows (i.e. when w), they are 0.
+    g_r = zeros(2*p, 1);
+    F_r = zeros(2*p, 1);
 
-    % Compute g & F
-    g_r = zeros(k_V + k_W, 1);
-    F_r = zeros(k_V + k_W, 1);
-
-    g_r(1:k_V) = e/h * bc(t_k) * U_V' * e_1;
-    F_r(1:k_V) = 1/e * U_V' * nonlin(U_V * y(1:k_V, k));
+    % Compute g, F; for the first p rows (i.e. when v), they are not necessarily 0.
+    g_r(1:p) = e/h * bc(t_k) * U_V' * e_1;
+    F_r(1:p) = (1/e) * U_V' * nonlin(U_V * y_previous(1:p));
 
     % Compute g + F + c
     gFc_sum = g_r + F_r + c_r;
 
     % Compute the next reduced-order solution
-    y(:, k+1) = y(:, k) + dt * (A_r * y(:, k) + gFc_sum);
+    y_new = y_previous + dt * (A_r * y_previous + gFc_sum);
+    y_previous = y_new;
 
-    
+    % Check if we take a snapshot
+    if any(storeInterval == k)
+        disp(t_k);
+        Y(:, end + 1) = y_new;
+    end
 end
 
 % Reconstruct the reduced-order solution
-Y_full = U * y;
+Y_full = U * Y;
 V_reconstructed = Y_full(1:N, :);
 W_reconstructed = Y_full(N+1:end, :);
 
+% Generate time vector for snapshots
+t_snapshots = tList(storeInterval);
+
 % Plot the solutions
 figure;
-plot(tList, V_reconstructed(1, :));
+plot(t_snapshots, V_reconstructed(1, :));
 hold on;
-plot(tList, W_reconstructed(1, :));
+plot(t_snapshots, W_reconstructed(1, :));
 xlabel('Time');
 ylabel('Solution (Voltage)');
 legend('V', 'W');
 title('Reduced-order model solutions');
-
+hold off;
 
 % Plot the solutions
 figure;
