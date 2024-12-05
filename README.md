@@ -27,10 +27,10 @@ This project demonstrates the application of POD for model order reduction on th
 
 The FitzHugh-Nagumo model is a two-variable simplification of the Hodgkin-Huxley model used to describe electrical impulses in excitable cells. The system of equations is given by:
 
-`
-\varepsilon \frac{\partial v}{\partial t} = \varepsilon^2 \frac{\partial^2 v}{\partial x^2} - v(v-0.1)(1-v) - w + c, \\
-\frac{\partial w}{\partial t} = b v - \gamma w + c,
-`
+
+`\varepsilon \frac{\partial v}{\partial t} = \varepsilon^2 \frac{\partial^2 v}{\partial x^2} - v(v-0.1)(1-v) - w + c, \\`
+`\frac{\partial w}{\partial t} = b v - \gamma w + c,`
+
 
 where:
 - `v` represents the membrane potential,
