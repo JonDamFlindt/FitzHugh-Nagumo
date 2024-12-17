@@ -86,7 +86,7 @@ cd FitzHugh-Nagumo
 FitzROM
 ```
 
-3. Customize parameters in `genOperators.m` to explore different settings of the FitzHugh-Nagumo system or POD truncation levels.
+3. Customize parameters in `genOperators.m` to explore different settings of the FitzHugh-Nagumo system, as well as `fitzROM` for different snapshots, as well as `script_fitz` on how to generate new snapshots.
 
 ---
 
@@ -94,9 +94,9 @@ FitzROM
 
 The output includes:
 
+- Singular value spectrum for evaluating the effectiveness of the chosen truncation.
 - Time evolution of \(v\) and \(w\) for the full and reduced-order systems.
 - Comparison plots showing the accuracy of the reduced-order model.
-- Singular value spectrum for evaluating the effectiveness of the chosen truncation.
 
 ---
 
