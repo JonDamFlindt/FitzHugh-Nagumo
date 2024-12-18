@@ -77,7 +77,7 @@ This project requires MATLAB 2024b or newer. Older versions may work, but is not
 
 ## Usage
 
-1. Clone the repository:
+1. Press 'Code' and 'Download ZIP', or clone the repository:
 
 ```bash
 git clone https://github.com/JonDamFlindt/FitzHugh-Nagumo.git
@@ -87,10 +87,10 @@ cd FitzHugh-Nagumo
 2. Run the simulation:
 
 ```matlab
-FitzROM
+script_fitz
 ```
 
-3. Customize parameters in `genOperators.m` to explore different settings of the FitzHugh-Nagumo system, as well as `fitzROM` for different snapshots, as well as `script_fitz` on how to generate new snapshots.
+3. Customize parameters in `genOperators.m`, `genTime.m` and `script_fitz.m` to explore different settings of the FitzHugh-Nagumo system.
 
 ---
 
@@ -106,8 +106,7 @@ The output includes:
 
 ## Acknowledgments
 
-This project is part of a bachelor thesis on model order reduction at the University of Southern Denmark (SDU). Portions of the code were provided by my thesis supervisor, professor Ralf Zimmermann. For more information on POD, its derivation and its applications, consult:
+This project is part of a bachelor thesis on model order reduction at the University of Southern Denmark (SDU). Portions of the code were provided by my thesis supervisor, Professor Ralf Zimmermann. For more information on POD, its derivation and its applications, consult:
 
 - Kutz, J. N., & Brunton, S. L. *Data-Driven Science and Engineering*
 - Stewart, G. W. *Matrix Algorithms Volume 1: Basic Decompositions*
-
