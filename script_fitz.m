@@ -6,7 +6,7 @@ close all;
 % This may take a while.
 % You might want to record the computation time.
 %
-% Afterwards, edit the parameters below in FitzROM run the function fitzROM
+% Afterwards, edit the parameters below in FitzROM to match.
 % tic; fitzROM(1024, 1000000, 8.0, 'Test_'); toc;
 % This shouldn't take that long as long as the amount of modes p is sensible.
 % You might want to record the computation time.
@@ -17,6 +17,7 @@ close all;
 Snaps = load('snapshots_fitz/Test_snapshots_N1024_tsteps1000000_Tend8.mat');
 Y = Snaps.Y;
 
+% use the same parameters as the ones loaded into Snaps
 Y_reconstructed = fitzROM(1024, 1000000, 8.0, 'Test_');
 
 
