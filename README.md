@@ -60,14 +60,18 @@ This repository contains the following files:
 
 - **`bc.m`**: Defines the boundary conditions of the FitzHugh-Nagumo system.
 - **`nonlin.m`**: Defines the nonlinear behavior \(f=v(v-0.1)(1-v)\) of the system.
-- **`genOperators.m`**: Generates the constant matrices \(c\) and \(A\) when computing the state vector \(y=[v,w]^T\).
+- **`genOperators.m`**: Generates the constant matrices \(c\) and \(A\), as well as defines some other constants, when computing the state vector \(y=[v,w]^T\).
+- **`genTime.m`**: Generates the time constants \(tList\) and \(dt\), which is the list of time steps (e.g., \(1, 2, 3, \dots\)) and the size of the time steps \(\Delta t\).
 - **`PODModes.m`**: Finds the first \(k\) modes of the given singular values using Relative Information Content (RIC).
+- **`fitzFOM.m`**: Solves the full-order model (FOM) of the FitzHugh-Nagumo system, producing high-fidelity snapshots of the solution for both \(v\) and \(w\) over time. The generated snapshots are saved to a `.mat` file.
+- **`fitzROM.m`**: Solves the reduced-order model (ROM) derived from Proper Orthogonal Decomposition (POD). Uses the precomputed POD basis to reconstruct approximate solutions for \(v\) and \(w\) with significantly reduced computational cost.
+- **`script_fitz.m`**: Main file that runs `fitzROM.m` and plots the full-order solutions alongside the reduced-order solutions. Includes comments on how to set up and use the project effectively.
 
 ---
 
 ## Dependencies
 
-This project requires MATLAB.
+This project requires MATLAB 2024b or newer. Older versions may work, but is not guaranteed.
 
 ---
 
