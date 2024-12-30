@@ -7,9 +7,9 @@ close all;
 % You might want to record the computation time.
 %
 % Afterwards, edit the parameters below in FitzROM to match.
-% tic; fitzROM(1024, 1000000, 8.0, 'Test_'); toc;
+% fitzROM(1024, 1000000, 8.0, 'Test_');
 % This shouldn't take that long as long as the amount of modes p is sensible.
-% You might want to record the computation time.
+% You might want to record the computation time, which should be shown automatically.
 %
 %
 
