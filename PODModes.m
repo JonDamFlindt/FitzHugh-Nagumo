@@ -1,6 +1,4 @@
-function k = PODModes(singular_values)
-    % Change as desired, personally I prefer 100 - 1e-6
-    threshold = 100 - 1.0e-6;
+function k = PODModes(singular_values, threshold)
     
     % Calculate the Relative Info Content
     info_sum = sum(singular_values);
