@@ -15,7 +15,7 @@ end
 filePath = sprintf('snapshots_fitz/%ssnapshots_N%d_tsteps%d_Tend%d.mat', prefix, N, tsteps, Tend);
 
 snapshots = load(filePath); % Load snapshots
-threshold = 100 - 1.0e-8; % Threshold for RIC; change as desired.
+threshold = 99.99; % Threshold for RIC; change as desired.
 
 Y = snapshots.Y; % Size 2N x M
 N = size(Y, 1) / 2; % Number of rows in V and W
