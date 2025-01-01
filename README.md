@@ -90,7 +90,7 @@ cd FitzHugh-Nagumo
 script_fitz
 ```
 
-3. Customize parameters in `genOperators.m`, `genTime.m` and `script_fitz.m` to explore different settings of the FitzHugh-Nagumo system.
+3. Customize parameters in `genOperators.m`, `genTime.m` and `script_fitz.m` to explore different settings of the FitzHugh-Nagumo system, and `fitzROM.m` for different error thresholds if using RIC for POD modes.
 
 ---
 
